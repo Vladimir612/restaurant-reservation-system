@@ -13,12 +13,14 @@ export class ReservationResolver {
 
   @Mutation(() => ReservationType)
   async createReservation(@Args('data') data: CreateReservationInput) {
-    await this.restaurantService.throwIfNotExists(data.restaurantId);
-
-    return this.reservationService.createReservation(
+    const restaurant = await this.restaurantService.throwIfNotExists(
       data.restaurantId,
-      data.date,
-      data.guestName,
     );
+
+    return this.reservationService.createReservation({
+      restaurant,
+      dateUtc: data.date,
+      guestName: data.guestName,
+    });
   }
 }

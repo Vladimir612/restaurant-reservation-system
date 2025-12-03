@@ -15,6 +15,9 @@ export class RestaurantType {
   @Field()
   closeHour: string;
 
+  @Field()
+  timezone: string;
+
   @Field(() => [ReservationType], { nullable: true })
   reservations?: ReservationType[];
 }

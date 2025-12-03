@@ -6,6 +6,7 @@ import { RestaurantModule } from './modules/restaurants/restaurant.module';
 import { ReservationModule } from './modules/reservations/reservation.module';
 import { BookingGraphQLModule } from './modules/booking-graphql/booking-graphql.module';
 import { GraphqlInfraModule } from './infrastructure/graphql/graphql.module';
+import { GraphqlScalarsModule } from './common/graphql/scalars/graphql.scalars.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { GraphqlInfraModule } from './infrastructure/graphql/graphql.module';
     RestaurantModule,
     ReservationModule,
     BookingGraphQLModule,
+    GraphqlScalarsModule,
   ],
 })
 export class AppModule {}

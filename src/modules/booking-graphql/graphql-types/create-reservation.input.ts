@@ -8,6 +8,6 @@ export class CreateReservationInput {
   @Field()
   guestName: string;
 
-  @Field()
+  @Field(() => Date)
   date: Date;
 }

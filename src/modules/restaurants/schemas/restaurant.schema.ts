@@ -11,6 +11,9 @@ export class Restaurant extends BaseEntity {
 
   @Prop({ required: true })
   closeHour: string;
+
+  @Prop({ type: String, required: true })
+  timezone: string;
 }
 
 export const RestaurantSchema = SchemaFactory.createForClass(Restaurant);

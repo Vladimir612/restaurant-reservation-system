@@ -3,15 +3,15 @@
 # ------------------------------------------------------
 
 input CreateReservationInput {
-  date: DateTime!
+  date: DateTimeUtc!
   guestName: String!
   restaurantId: ID!
 }
 
 """
-A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+Strict UTC ISO DateTime scalar. Must be ISO8601 string ending with Z (e.g. 2025-04-05T18:00:00Z).
 """
-scalar DateTime
+scalar DateTimeUtc
 
 type Mutation {
   createReservation(data: CreateReservationInput!): ReservationType!
@@ -22,7 +22,7 @@ type Query {
 }
 
 type ReservationType {
-  date: DateTime!
+  date: DateTimeUtc!
   guestName: String!
   id: ID!
   restaurantId: String!
@@ -34,4 +34,5 @@ type RestaurantType {
   name: String!
   openHour: String!
   reservations: [ReservationType!]
+  timezone: String!
 }

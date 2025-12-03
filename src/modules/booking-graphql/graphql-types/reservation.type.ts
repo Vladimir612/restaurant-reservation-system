@@ -11,6 +11,6 @@ export class ReservationType {
   @Field()
   guestName: string;
 
-  @Field()
+  @Field(() => Date)
   date: Date;
 }
