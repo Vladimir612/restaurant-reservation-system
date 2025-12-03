@@ -32,6 +32,7 @@ async function bootstrap() {
   const url = await app.getUrl();
   Logger.log(`Server is running on: ${url}`, 'Bootstrap');
   Logger.log(`Swagger Docs available at: ${url}/docs`, 'Bootstrap');
+  Logger.log(`GraphQL playground available at: ${url}/graphql`, 'Bootstrap');
 }
 
 bootstrap();
