@@ -3,6 +3,7 @@
 # ------------------------------------------------------
 
 input CreateReservationInput {
+  """UTC datetime string ending with Z"""
   date: DateTimeUtc!
   guestName: String!
   restaurantId: ID!

@@ -7,6 +7,8 @@ import { ReservationModule } from './modules/reservations/reservation.module';
 import { BookingGraphQLModule } from './modules/booking-graphql/booking-graphql.module';
 import { GraphqlInfraModule } from './infrastructure/graphql/graphql.module';
 import { GraphqlScalarsModule } from './common/graphql/scalars/graphql.scalars.module';
+import { AuthModule } from './modules/auth/auth.module';
+import { UsersModule } from './modules/users/users.module';
 
 @Module({
   imports: [
@@ -20,6 +22,8 @@ import { GraphqlScalarsModule } from './common/graphql/scalars/graphql.scalars.m
     ReservationModule,
     BookingGraphQLModule,
     GraphqlScalarsModule,
+    UsersModule,
+    AuthModule,
   ],
 })
 export class AppModule {}
