@@ -1,4 +1,12 @@
-import { Args, ID, Query, Resolver } from '@nestjs/graphql';
+import {
+  Args,
+  ID,
+  Int,
+  Parent,
+  Query,
+  ResolveField,
+  Resolver,
+} from '@nestjs/graphql';
 import { RestaurantType } from './graphql-types/restaurant.type';
 import { RestaurantService } from '../restaurants/restaurant.service';
 import { ReservationService } from '../reservations/reservation.service';
@@ -22,5 +30,12 @@ export class RestaurantResolver {
       ...restaurant.toObject(),
       reservations: reservations.map((r) => r.toObject()),
     };
+  }
+
+  @ResolveField(() => Int)
+  async reservationCount(
+    @Parent() restaurant: RestaurantType,
+  ): Promise<number> {
+    return this.reservationService.countByRestaurant(restaurant.id);
   }
 }

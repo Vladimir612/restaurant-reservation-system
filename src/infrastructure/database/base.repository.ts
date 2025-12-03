@@ -42,6 +42,10 @@ export abstract class BaseRepository<T extends Document> {
       .exec();
   }
 
+  async count(filter: FilterQuery<T> = {} as FilterQuery<T>): Promise<number> {
+    return this.model.countDocuments(filter).exec();
+  }
+
   // Transaction helpers
   createOne(data: Partial<T>, session: ClientSession) {
     return this.model.create([data], { session });

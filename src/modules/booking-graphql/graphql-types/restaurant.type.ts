@@ -1,4 +1,4 @@
-import { Field, ID, ObjectType } from '@nestjs/graphql';
+import { Field, ID, Int, ObjectType } from '@nestjs/graphql';
 import { ReservationType } from 'src/modules/booking-graphql/graphql-types/reservation.type';
 
 @ObjectType()
@@ -20,4 +20,9 @@ export class RestaurantType {
 
   @Field(() => [ReservationType], { nullable: true })
   reservations?: ReservationType[];
+
+  @Field(() => Int, {
+    description: 'Total number of reservations for this restaurant',
+  })
+  reservationCount: number;
 }

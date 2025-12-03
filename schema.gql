@@ -33,6 +33,9 @@ type RestaurantType {
   id: ID!
   name: String!
   openHour: String!
+
+  """Total number of reservations for this restaurant"""
+  reservationCount: Int!
   reservations: [ReservationType!]
   timezone: String!
 }

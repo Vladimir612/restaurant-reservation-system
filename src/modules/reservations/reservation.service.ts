@@ -59,4 +59,10 @@ export class ReservationService {
       restaurantId: new Types.ObjectId(restaurantId),
     });
   }
+
+  async countByRestaurant(restaurantId: string): Promise<number> {
+    return this.reservationRepo.count({
+      restaurantId: new Types.ObjectId(restaurantId),
+    } as any);
+  }
 }
