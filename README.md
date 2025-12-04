@@ -1,98 +1,159 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+---
+title: 'Restaurant Reservation System'
+description: 'Restaurant Reservation System built with NestJS, featuring authentication, GraphQL support, and validation.'
+author: 'Vladimir Lazarevic'
+---
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
-
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
-
-## Description
-
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
-
-## Project setup
+# How to Run
 
 ```bash
-$ npm install
+npm install
+npm run start
 ```
 
-## Compile and run the project
+---
 
-```bash
-# development
-$ npm run start
+# Initial User Setup (Creating or Using Admin Accounts)
 
-# watch mode
-$ npm run start:dev
+After starting the application, open **Swagger UI** at:
 
-# production mode
-$ npm run start:prod
+```
+http://localhost:5000/docs
 ```
 
-## Run tests
+Swagger provides full documentation for all REST endpoints, including user creation.
 
-```bash
-# unit tests
-$ npm run test
+## 1. Creating a New Bootstrap User (DEV ONLY)
 
-# e2e tests
-$ npm run test:e2e
+To initialize the system, you may create a basic user using the:
 
-# test coverage
-$ npm run test:cov
+### **POST `/users/bootstrap`** endpoint
+
+You can find it in Swagger under:
+
+```
+Users → POST /users/bootstrap
 ```
 
-## Deployment
+Details:
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
+- Requires only **email** and **password** in the request body
+- Always creates a user with the **OPERATOR** role
+- Does **not** require authentication
+- For development use only
 
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+Example body:
 
-```bash
-$ npm install -g @nestjs/mau
-$ mau deploy
+```json
+{
+  "email": "bootstrap@test.com",
+  "password": "Password123!"
+}
 ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+After creating this bootstrap user, connect to the database and manually update:
 
-## Resources
+```json
+{ "role": "SUPER_ADMIN" }
+```
 
-Check out a few resources that may come in handy when working with NestJS:
+if you want to promote the user to full admin privileges.
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+---
 
-## Support
+# Existing Users You Can Log Into
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+All predefined accounts use the same password:
 
-## Stay in touch
+### **Password:** `Password123!`
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+---
 
-## License
+## SUPER_ADMIN (full system access)
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+| \_id                     | Email                                           | Role        |
+| ------------------------ | ----------------------------------------------- | ----------- |
+| 6930a3fd480af990d7314d52 | [bootstrap@test.com](mailto:bootstrap@test.com) | SUPER_ADMIN |
+
+---
+
+## RESTAURANT_ADMIN users
+
+| \_id                     | Email                                                   | Role             | restaurantId             |
+| ------------------------ | ------------------------------------------------------- | ---------------- | ------------------------ |
+| 6930aac88afe0cc274900e83 | [new.operator2@test.com](mailto:new.operator2@test.com) | RESTAURANT_ADMIN | 69308cd3e4b6d388c08255b9 |
+| 6930ab6489e70502cc5b49ae | [new.operator6@test.com](mailto:new.operator6@test.com) | RESTAURANT_ADMIN | 69308cd3e4b6d388c08255b9 |
+| 6930a76d0520b6d31dbcf3e0 | [new.operator@test.com](mailto:new.operator@test.com)   | RESTAURANT_ADMIN | 69308cd3e4b6d388c08255b9 |
+
+---
+
+## OPERATOR users
+
+| \_id                     | Email                                                   | Role     | restaurantId             |
+| ------------------------ | ------------------------------------------------------- | -------- | ------------------------ |
+| 6930aad38afe0cc274900e86 | [new.operator3@test.com](mailto:new.operator3@test.com) | OPERATOR | 69308cd3e4b6d388c08255b9 |
+| 6930ab018afe0cc274900e8c | [new.operator4@test.com](mailto:new.operator4@test.com) | OPERATOR | 69308cd3e4b6d388c08255b9 |
+| 6930ab178afe0cc274900e90 | [new.operator5@test.com](mailto:new.operator5@test.com) | OPERATOR | 69308cd3e4b6d388c08255b9 |
+
+---
+
+# Notes on Testing
+
+- Use **Swagger** for all REST endpoints.
+- For GraphQL:
+  - **Older commits** (before JWT auth) can be tested via the built-in GraphQL playground.
+  - **Newer commits** require **Postman** or any GraphQL client that supports sending cookies.
+
+---
+
+# Optional Tasks Covered
+
+## Reservation time validation
+
+**Commit:** `8bc1494`
+Added a rule preventing reservation creation when the requested time is outside the restaurant’s `openHour`–`closeHour` range.
+
+---
+
+## Custom GraphQL DateTimeUtc scalar
+
+**Commit:** `8bc1494`
+Introduced a custom scalar enforcing strict ISO-8601 UTC formatting for all GraphQL date inputs.
+
+---
+
+## `reservationCount` field resolver
+
+**Commit:** `1128805`
+Added a GraphQL field resolver that dynamically returns the number of reservations for a restaurant.
+
+---
+
+## JWT authentication & authorization
+
+**Commit:** `6e8bd6a`
+Implemented login with an HTTP-only cookie and JWT protection for REST and GraphQL routes.
+
+Role system:
+
+- **SUPER_ADMIN** – full access to all resources
+- **RESTAURANT_ADMIN** – can manage only restaurants they are assigned to
+- **OPERATOR** – can view data for their assigned restaurant but cannot create reservations
+
+Authorization checks use **role + restaurant scope**.
+
+---
+
+## Strict TypeScript
+
+**Commit:** `a596052`
+Resolved all strict-mode TypeScript issues (DTO typing, payloads, null checks, no implicit `any`, etc.).
+
+---
+
+## Unit and integration tests
+
+**Commit:** `7aa5495`
+Added Jest-based unit and integration tests for restaurant and reservation logic.
+
+---
