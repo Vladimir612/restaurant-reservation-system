@@ -14,7 +14,7 @@ export class UsersService {
   constructor(private readonly userRepo: UserRepository) {}
 
   async findByEmail(email: string): Promise<UserDocument | null> {
-    return this.userRepo.findOne({ email: email.toLowerCase().trim() } as any);
+    return this.userRepo.findOne({ email: email.toLowerCase().trim() });
   }
 
   async findById(id: string): Promise<UserDocument | null> {
@@ -24,7 +24,7 @@ export class UsersService {
   async createUserAs(
     currentUser: { id: string; role: UserRole; restaurantId?: string | null },
     dto: CreateUserDto,
-  ) {
+  ): Promise<UserDocument> {
     if (dto.role === UserRole.SUPER_ADMIN) {
       throw new ForbiddenException(
         'SuperAdmin users cannot be created via API.',
@@ -45,7 +45,7 @@ export class UsersService {
         restaurantId: dto.restaurantId
           ? new Types.ObjectId(dto.restaurantId)
           : null,
-      } as any);
+      });
     }
 
     if (currentUser.role === UserRole.RESTAURANT_ADMIN) {
@@ -68,7 +68,7 @@ export class UsersService {
         password: passwordHash,
         role: dto.role,
         restaurantId: new Types.ObjectId(currentUser.restaurantId),
-      } as any);
+      });
     }
 
     throw new ForbiddenException('You are not allowed to create users.');
@@ -92,7 +92,9 @@ export class UsersService {
     return user;
   }
 
-  async createUserBootstrap(dto: CreateBootstrapUserDto) {
+  async createUserBootstrap(
+    dto: CreateBootstrapUserDto,
+  ): Promise<UserDocument> {
     const existing = await this.findByEmail(dto.email);
     if (existing) {
       throw new ForbiddenException('User with this email already exists.');
@@ -104,6 +106,6 @@ export class UsersService {
       email: dto.email.toLowerCase().trim(),
       password: passwordHash,
       role: UserRole.OPERATOR,
-    } as any);
+    });
   }
 }

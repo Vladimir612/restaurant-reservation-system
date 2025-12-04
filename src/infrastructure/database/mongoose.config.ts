@@ -1,13 +1,14 @@
 import { ConfigService } from '@nestjs/config';
 import { Logger } from '@nestjs/common';
-import { Connection, MongooseError } from 'mongoose';
+import { Connection, ConnectionStates, MongooseError } from 'mongoose';
+import { MongooseModuleOptions } from '@nestjs/mongoose';
 
 export const mongooseConfig = {
   imports: [],
-  useFactory: (configService: ConfigService) => ({
+  useFactory: (configService: ConfigService): MongooseModuleOptions => ({
     uri: configService.get<string>('DB_CONNECTION_STRING'),
     connectionFactory: (connection: Connection): Connection => {
-      if (connection.readyState === 1) {
+      if (connection.readyState === ConnectionStates.connected) {
         Logger.log('MongoDB connected', 'Database');
       }
 

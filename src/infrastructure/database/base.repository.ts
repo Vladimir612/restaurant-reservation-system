@@ -1,4 +1,4 @@
-import { Model, Document, FilterQuery, ClientSession, Types } from 'mongoose';
+import { Model, Document, FilterQuery, Types } from 'mongoose';
 
 export abstract class BaseRepository<T extends Document> {
   constructor(protected readonly model: Model<T>) {}
@@ -35,7 +35,10 @@ export abstract class BaseRepository<T extends Document> {
     return this.model.find({ _id: { $in: objectIds } }).exec();
   }
 
-  async findManyByFilter(filter: FilterQuery<T>, selectFields?: string) {
+  async findManyByFilter(
+    filter: FilterQuery<T>,
+    selectFields?: string,
+  ): Promise<T[]> {
     return this.model
       .find(filter)
       .select(selectFields ?? '')
@@ -44,22 +47,5 @@ export abstract class BaseRepository<T extends Document> {
 
   async count(filter: FilterQuery<T> = {} as FilterQuery<T>): Promise<number> {
     return this.model.countDocuments(filter).exec();
-  }
-
-  // Transaction helpers
-  createOne(data: Partial<T>, session: ClientSession) {
-    return this.model.create([data], { session });
-  }
-
-  insertMany(data: Partial<T>[], session: ClientSession) {
-    return this.model.insertMany(data, { session });
-  }
-
-  updateOne(filter: FilterQuery<T>, data: Partial<T>, session: ClientSession) {
-    return this.model.updateOne(filter, data, { session });
-  }
-
-  async deleteOne(filter: FilterQuery<T>, session: ClientSession) {
-    return this.model.deleteOne(filter).session(session);
   }
 }

@@ -4,19 +4,19 @@ import { ReservationType } from 'src/modules/booking-graphql/graphql-types/reser
 @ObjectType()
 export class RestaurantType {
   @Field(() => ID)
-  id: string;
+  id!: string;
 
   @Field()
-  name: string;
+  name!: string;
 
   @Field()
-  openHour: string;
+  openHour!: string;
 
   @Field()
-  closeHour: string;
+  closeHour!: string;
 
   @Field()
-  timezone: string;
+  timezone!: string;
 
   @Field(() => [ReservationType], { nullable: true })
   reservations?: ReservationType[];
@@ -24,5 +24,5 @@ export class RestaurantType {
   @Field(() => Int, {
     description: 'Total number of reservations for this restaurant',
   })
-  reservationCount: number;
+  reservationCount?: number;
 }

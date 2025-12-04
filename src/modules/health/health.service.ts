@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectConnection } from '@nestjs/mongoose';
-import { Connection } from 'mongoose';
+import { Connection, ConnectionStates } from 'mongoose';
 import { HealthStatusResponse } from './types/health-status-response.type';
 import { CheckState, HealthStatus } from './types/health.enums';
 
@@ -10,7 +10,9 @@ export class HealthService {
 
   getHealthStatus(): HealthStatusResponse {
     const dbReady =
-      this.connection.readyState === 1 ? CheckState.UP : CheckState.DOWN;
+      this.connection.readyState === ConnectionStates.connected
+        ? CheckState.UP
+        : CheckState.DOWN;
 
     return {
       status: dbReady === CheckState.UP ? HealthStatus.OK : HealthStatus.ERROR,

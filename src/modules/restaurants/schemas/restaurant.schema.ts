@@ -3,18 +3,22 @@ import { BaseEntity } from 'src/infrastructure/database/base.entity';
 
 @Schema({ timestamps: true })
 export class Restaurant extends BaseEntity {
-  @Prop({ required: true })
-  name: string;
+  declare id: string;
 
   @Prop({ required: true })
-  openHour: string;
+  name!: string;
 
   @Prop({ required: true })
-  closeHour: string;
+  openHour!: string;
+
+  @Prop({ required: true })
+  closeHour!: string;
 
   @Prop({ type: String, required: true })
-  timezone: string;
+  timezone!: string;
 }
+
+export type RestaurantDocument = Restaurant;
 
 export const RestaurantSchema = SchemaFactory.createForClass(Restaurant);
 

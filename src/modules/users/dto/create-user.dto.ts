@@ -12,19 +12,19 @@ import { UserRole } from '../enums/user-role-enum';
 export class CreateUserDto {
   @ApiProperty({ example: 'new.operator@test.com' })
   @IsEmail()
-  email: string;
+  email!: string;
 
   @ApiProperty({ example: 'Password123!' })
   @IsString()
   @MinLength(8)
-  password: string;
+  password!: string;
 
   @ApiProperty({
     enum: UserRole,
     example: UserRole.OPERATOR,
   })
   @IsEnum(UserRole)
-  role: UserRole;
+  role!: UserRole;
 
   @ApiProperty({
     example: '675aaa000000000000000111',

@@ -1,4 +1,13 @@
-import { Body, Controller, Post, Req, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Post,
+  Req,
+  UnauthorizedException,
+  UseGuards,
+  UsePipes,
+  ValidationPipe,
+} from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiCreatedResponse } from '@nestjs/swagger';
 import type { Request } from 'express';
 import { UsersService } from './users.service';
@@ -6,7 +15,8 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { CreateBootstrapUserDto } from './dto/create-bootstrap-user.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { CreateUserGuard } from '../auth/guards/create-user.guard';
-import { JwtPayload } from '../auth/auth.service';
+import { JwtPayload } from '../auth/guards/types/request.types';
+import { UserResponse } from './dto/user-response.dto';
 
 interface RequestWithUser extends Request {
   user?: JwtPayload;
@@ -14,6 +24,7 @@ interface RequestWithUser extends Request {
 
 @ApiTags('Users')
 @Controller('users')
+@UsePipes(new ValidationPipe({ whitelist: true, transform: true }))
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
@@ -31,8 +42,15 @@ export class UsersController {
       },
     },
   })
-  async createUser(@Req() req: RequestWithUser, @Body() dto: CreateUserDto) {
-    const currentUser = req.user!;
+  async createUser(
+    @Req() req: RequestWithUser,
+    @Body() dto: CreateUserDto,
+  ): Promise<UserResponse> {
+    if (!req.user) {
+      throw new UnauthorizedException('User not authenticated');
+    }
+
+    const currentUser = req.user;
 
     const created = await this.usersService.createUserAs(
       {
@@ -68,7 +86,9 @@ export class UsersController {
       },
     },
   })
-  async createBootstrapUser(@Body() dto: CreateBootstrapUserDto) {
+  async createBootstrapUser(
+    @Body() dto: CreateBootstrapUserDto,
+  ): Promise<UserResponse> {
     const created = await this.usersService.createUserBootstrap(dto);
 
     return {

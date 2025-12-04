@@ -8,8 +8,10 @@ export class DatabaseService implements OnApplicationShutdown {
 
   constructor(@InjectConnection() private readonly connection: Connection) {}
 
-  async onApplicationShutdown(signal?: string) {
-    this.logger.log(`Shutting down (signal: ${signal}) → closing MongoDB...`);
+  async onApplicationShutdown(signal?: string): Promise<void> {
+    this.logger.log(
+      `Shutting down (signal: ${signal ?? 'unknown'}) → closing MongoDB...`,
+    );
 
     try {
       await this.connection.close();

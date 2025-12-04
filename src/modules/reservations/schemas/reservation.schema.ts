@@ -4,15 +4,19 @@ import { BaseEntity } from 'src/infrastructure/database/base.entity';
 
 @Schema({ timestamps: true })
 export class Reservation extends BaseEntity {
+  declare id: string;
+
   @Prop({ type: Types.ObjectId, ref: 'Restaurant', required: true })
-  restaurantId: Types.ObjectId;
+  restaurantId!: Types.ObjectId;
 
   @Prop({ required: true })
-  guestName: string;
+  guestName!: string;
 
   @Prop({ type: Date, required: true })
-  date: Date;
+  date!: Date;
 }
+
+export type ReservationDocument = Reservation;
 
 export const ReservationSchema = SchemaFactory.createForClass(Reservation);
 

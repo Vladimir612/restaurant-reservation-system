@@ -1,4 +1,4 @@
-import { Global, Module } from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import { DateTimeUtcScalar } from 'src/common/graphql/scalars/datetime-utc.scalar';
 
 @Module({

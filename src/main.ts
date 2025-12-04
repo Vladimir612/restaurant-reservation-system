@@ -1,21 +1,13 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { Logger, ValidationPipe } from '@nestjs/common';
+import { Logger } from '@nestjs/common';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import cookieParser from 'cookie-parser';
 
-async function bootstrap() {
+async function bootstrap(): Promise<void> {
   const app = await NestFactory.create(AppModule);
 
   app.use(cookieParser());
-
-  app.useGlobalPipes(
-    new ValidationPipe({
-      whitelist: true,
-      transform: true,
-      validateCustomDecorators: true,
-    }),
-  );
 
   app.enableShutdownHooks();
 
@@ -46,4 +38,7 @@ async function bootstrap() {
   Logger.log(`GraphQL playground available at: ${url}/graphql`, 'Bootstrap');
 }
 
-bootstrap();
+bootstrap().catch((err: unknown) => {
+  console.error('Error during application bootstrap:', err);
+  process.exit(1);
+});

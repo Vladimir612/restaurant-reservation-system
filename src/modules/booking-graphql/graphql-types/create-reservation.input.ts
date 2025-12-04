@@ -5,13 +5,13 @@ import { IsDate, IsString } from 'class-validator';
 export class CreateReservationInput {
   @Field(() => ID)
   @IsString()
-  restaurantId: string;
+  restaurantId!: string;
 
   @Field()
   @IsString()
-  guestName: string;
+  guestName!: string;
 
   @Field(() => Date, { description: 'UTC datetime string ending with Z' })
   @IsDate()
-  date: string;
+  date!: string;
 }

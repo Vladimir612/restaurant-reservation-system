@@ -1,11 +1,20 @@
-import { Body, Controller, Post, Res } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Post,
+  Res,
+  UsePipes,
+  ValidationPipe,
+} from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiOkResponse } from '@nestjs/swagger';
 import type { Response } from 'express';
 import { AuthService } from './auth.service';
 import { LoginDto } from './login.dto';
+import { UserDto } from './dto/login-response.dto';
 
 @ApiTags('Auth')
 @Controller('auth')
+@UsePipes(new ValidationPipe({ whitelist: true, transform: true }))
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
@@ -27,7 +36,7 @@ export class AuthController {
   async login(
     @Body() dto: LoginDto,
     @Res({ passthrough: true }) res: Response,
-  ) {
+  ): Promise<UserDto> {
     const { accessToken, user } = await this.authService.login(dto);
 
     res.cookie('Authentication', accessToken, {
@@ -36,8 +45,6 @@ export class AuthController {
       sameSite: 'strict',
     });
 
-    return {
-      user,
-    };
+    return user;
   }
 }

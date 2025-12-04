@@ -13,6 +13,7 @@ import { ReservationService } from '../reservations/reservation.service';
 import { UseGuards } from '@nestjs/common';
 import { GraphqlJwtAuthGuard } from '../auth/guards/graphql/graphql-jwt-auth.guard';
 import { RestaurantScopeGuard } from '../auth/guards/graphql/restaurant-scope.guard';
+import { ReservationType } from './graphql-types/reservation.type';
 
 @Resolver(() => RestaurantType)
 export class RestaurantResolver {
@@ -23,17 +24,23 @@ export class RestaurantResolver {
 
   @Query(() => RestaurantType, { nullable: true })
   @UseGuards(GraphqlJwtAuthGuard, RestaurantScopeGuard)
-  async getRestaurant(@Args('id', { type: () => ID }) id: string) {
+  async getRestaurant(
+    @Args('id', { type: () => ID }) id: string,
+  ): Promise<RestaurantType | null> {
     const restaurant = await this.restaurantService.findById(id);
 
     if (!restaurant) return null;
 
     const reservations = await this.reservationService.findByRestaurant(id);
 
-    return {
-      ...restaurant.toObject(),
-      reservations: reservations.map((r) => r.toObject()),
-    };
+    const restaurantObj = restaurant.toObject<RestaurantType>();
+    const reservationsObj = reservations.map((r) =>
+      r.toObject<ReservationType>(),
+    );
+
+    return Object.assign({}, restaurantObj, {
+      reservations: reservationsObj,
+    }) as RestaurantType;
   }
 
   @ResolveField(() => Int)

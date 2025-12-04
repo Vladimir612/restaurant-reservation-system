@@ -6,7 +6,7 @@ export class DateTimeUtcScalar implements CustomScalar<string, Date> {
   description =
     'Strict UTC ISO DateTime scalar. Must be ISO8601 string ending with Z (e.g. 2025-04-05T18:00:00Z).';
 
-  parseValue(value: string): Date {
+  parseValue(value: unknown): Date {
     if (typeof value !== 'string')
       throw new Error('DateTimeUTC must be a string');
 
@@ -22,7 +22,10 @@ export class DateTimeUtcScalar implements CustomScalar<string, Date> {
     return date;
   }
 
-  serialize(value: Date): string {
+  serialize(value: unknown): string {
+    if (!(value instanceof Date)) {
+      throw new Error('DateTimeUTC serialize expects a Date object');
+    }
     return value.toISOString();
   }
 

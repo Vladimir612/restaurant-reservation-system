@@ -20,17 +20,26 @@ export class ReservationResolver {
   @Mutation(() => ReservationType)
   @UseGuards(GraphqlJwtAuthGuard, RolesGuard, RestaurantScopeGuard)
   @Roles(UserRole.SUPER_ADMIN, UserRole.RESTAURANT_ADMIN)
-  async createReservation(@Args('data') data: CreateReservationInput) {
+  async createReservation(
+    @Args('data') data: CreateReservationInput,
+  ): Promise<ReservationType> {
     const restaurant = await this.restaurantService.throwIfNotExists(
       data.restaurantId,
     );
 
     const dateUtc = new Date(data.date);
 
-    return this.reservationService.createReservation({
+    const reservation = await this.reservationService.createReservation({
       restaurant,
       dateUtc,
       guestName: data.guestName,
     });
+
+    return {
+      id: reservation.id,
+      restaurantId: reservation.restaurantId.toString(),
+      guestName: reservation.guestName,
+      date: reservation.date,
+    };
   }
 }

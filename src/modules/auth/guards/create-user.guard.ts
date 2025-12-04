@@ -5,8 +5,8 @@ import {
   Injectable,
 } from '@nestjs/common';
 import { Request } from 'express';
-import { JwtPayload } from '../auth.service';
 import { UserRole } from 'src/modules/users/enums/user-role-enum';
+import { JwtPayload } from './types/request.types';
 
 interface RequestWithUser extends Request {
   user?: JwtPayload;

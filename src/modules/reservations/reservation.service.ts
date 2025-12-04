@@ -3,6 +3,7 @@ import { ReservationRepository } from './reservation.repository';
 import { Types } from 'mongoose';
 import { CreateReservationPayload } from './dto/create-reservation-payload';
 import { DateTime } from 'luxon';
+import { ReservationDocument } from './schemas/reservation.schema';
 
 const BUFFER_MINUTES_BEFORE_CLOSE = 30;
 
@@ -10,7 +11,9 @@ const BUFFER_MINUTES_BEFORE_CLOSE = 30;
 export class ReservationService {
   constructor(private readonly reservationRepo: ReservationRepository) {}
 
-  async createReservation(payload: CreateReservationPayload) {
+  async createReservation(
+    payload: CreateReservationPayload,
+  ): Promise<ReservationDocument> {
     const { restaurant, dateUtc, guestName } = payload;
 
     const localDate = DateTime.fromJSDate(dateUtc, { zone: 'utc' }).setZone(
@@ -43,7 +46,7 @@ export class ReservationService {
 
     if (localDate > bufferCloseDate) {
       throw new BadRequestException(
-        `Reservations must be made at least ${BUFFER_MINUTES_BEFORE_CLOSE} minutes before closing time (${restaurant.closeHour}).`,
+        `Reservations must be made at least ${BUFFER_MINUTES_BEFORE_CLOSE.toString()} minutes before closing time (${restaurant.closeHour}).`,
       );
     }
 
@@ -54,7 +57,7 @@ export class ReservationService {
     });
   }
 
-  findByRestaurant(restaurantId: string) {
+  async findByRestaurant(restaurantId: string): Promise<ReservationDocument[]> {
     return this.reservationRepo.findManyByFilter({
       restaurantId: new Types.ObjectId(restaurantId),
     });
@@ -63,6 +66,6 @@ export class ReservationService {
   async countByRestaurant(restaurantId: string): Promise<number> {
     return this.reservationRepo.count({
       restaurantId: new Types.ObjectId(restaurantId),
-    } as any);
+    });
   }
 }
